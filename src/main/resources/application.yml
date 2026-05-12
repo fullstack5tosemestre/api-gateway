@@ -9,11 +9,23 @@ spring:
       server:
         webflux:
           routes:
+            # API INVENTARIO
             - id: products
               uri: http://${INVENTORY_IP:localhost}:8081
               predicates:
                 - Path=/api/v1/products/**
 
+            - id: branches
+              uri: http://${INVENTORY_IP:localhost}:8081
+              predicates:
+                - Path=/api/v1/branches/**
+
+            - id: warehouses
+              uri: http://${INVENTORY_IP:localhost}:8081
+              predicates:
+                - Path=/api/v1/warehouses/**
+
+            # API PEDIDOS
             - id: orders
               uri: http://${ORDERS_IP:localhost}:8081
               predicates:
