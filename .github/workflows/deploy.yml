@@ -59,12 +59,10 @@ jobs:
           'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 089485767547.dkr.ecr.us-east-1.amazonaws.com && \
           docker pull ${{ secrets.ECR_REPO_URL_API_GATEWAY }}:latest && \
           docker rm -f gateway || true && \
-          docker run -d -p 3001:3001 \
+          docker run -d -p 80:9090 \
           -e INVENTORY_IP=${{ secrets.EC2_API_INVENTARIO_PRIVATE_IP}} \
           -e ORDERS_IP=${{ secrets.EC2_API_PEDIDOS_PRIVATE_IP}} \
           --restart unless-stopped \
           --name gateway \
-          ${{ secrets.ECR_REPO_URL_API_GATEWAY }}:latest'"
-
-      - name: Purge unused images in EC2
-        run: docker image prune -af
+          ${{ secrets.ECR_REPO_URL_API_GATEWAY }}:latest \
+          && docker image prune -af'"
