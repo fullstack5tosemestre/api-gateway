@@ -1,0 +1,64 @@
+name: Build and deploy to AWS
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "Dockerfile"
+      - "src/**"
+
+jobs:
+  publish-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: build .jar file
+        run: |
+          chmod +x ./mvnw
+          ./mvnw clean package
+
+      - name: Build Docker image
+        run: |
+          docker build -t api-gateway:latest .
+          docker tag api-gateway:latest ${{ secrets.ECR_REPO_URL_API_GATEWAY }}:latest
+
+      - name: Push image to ECR
+        run: |
+          docker push ${{ secrets.ECR_REPO_URL_API_GATEWAY }}:latest
+
+      - name: Create SSH key
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
+          chmod 400 key.pem
+
+      - name: Deploy to private api gateway EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no \
+          -i key.pem \
+          ec2-user@${{ secrets.EC2_API_GATEWAY_PUBLIC_IP }} \
+          "ssh -o StrictHostKeyChecking=no \
+          -i ~/DevOps.pem \
+          ec2-user@${{ secrets.EC2_API_GATEWAY_PUBLIC_IP }} \
+          'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 089485767547.dkr.ecr.us-east-1.amazonaws.com && \
+          docker pull ${{ secrets.ECR_REPO_URL_API_GATEWAY }}:latest && \
+          docker rm -f gateway || true && \
+          docker run -d -p 3001:3001 \
+          -e INVENTORY_IP=${{ secrets.EC2_API_INVENTARIO_PRIVATE_IP}} \
+          -e ORDERS_IP=${{ secrets.EC2_API_PEDIDOS_PRIVATE_IP}} \
+          --restart unless-stopped \
+          --name gateway \
+          ${{ secrets.ECR_REPO_URL_API_GATEWAY }}:latest'"
