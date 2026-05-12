@@ -1,4 +1,5 @@
 name: Build and deploy to AWS
+
 on:
   push:
     branches:
@@ -6,6 +7,8 @@ on:
     paths:
       - "Dockerfile"
       - "src/**"
+
+  workflow_dispatch:
 
 jobs:
   publish-image:
