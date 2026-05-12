@@ -1,0 +1,20 @@
+server:
+  port: 9090
+
+spring:
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: inventory
+              uri: http://${INVENTORY_IP:localhost}:8081
+              predicates:
+                - Path=api/v1/products/**
+
+            - id: orders
+              uri: http://${ORDERS_IP:localhost}:8081
+              predicates:
+                - Path=/api/v1/orders/**
