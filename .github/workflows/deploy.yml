@@ -65,3 +65,6 @@ jobs:
           --restart unless-stopped \
           --name gateway \
           ${{ secrets.ECR_REPO_URL_API_GATEWAY }}:latest'"
+
+      - name: Purge unused images in EC2
+        run: docker image prune -af
