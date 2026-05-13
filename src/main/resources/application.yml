@@ -11,9 +11,11 @@ spring:
   cloud:
     gateway:
       globalcors:
+        add-to-simple-url-handler-mapping: true
         corsConfigurations:
           "[/**]":
-            allowedOrigins: "http://${CORS_ALLOWED_ORIGINS}"
+            allowedOriginPatterns:
+              - "${cors.allowed-origins}"
             allowedMethods:
               - GET
               - POST
@@ -58,3 +60,6 @@ spring:
               uri: http://${USERS_IP:localhost}:8081
               predicates:
                 - Path=/api/v1/roles/**
+
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:https://fullstack5tosemestre.github.io/frontend}
