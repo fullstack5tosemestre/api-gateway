@@ -13,7 +13,7 @@ spring:
       globalcors:
         corsConfigurations:
           "[/**]":
-            allowedOrigins: "https://fullstack5tosemestre.github.io/frontend"
+            allowedOrigins: ${CORS_ALLOWED_ORIGINS}
             allowedMethods:
               - GET
               - POST
