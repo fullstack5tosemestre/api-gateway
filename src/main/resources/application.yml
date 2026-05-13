@@ -14,8 +14,7 @@ spring:
         add-to-simple-url-handler-mapping: true
         corsConfigurations:
           "[/**]":
-            allowedOriginPatterns:
-              - "${cors.allowed-origins}"
+            allowedOriginPatterns: http://${cors.allowed-origins}
             allowedMethods:
               - GET
               - POST
@@ -25,6 +24,7 @@ spring:
               - OPTIONS
             allowedHeaders:
               - "*"
+            allowCredentials: true
       server:
         webflux:
           routes:

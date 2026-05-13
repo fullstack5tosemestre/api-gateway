@@ -15,7 +15,7 @@ public class GatewayCorsConfig {
 
     @Bean
     public CorsWebFilter corsWebFilter(
-            @Value("${cors.allowed-origins}") String allowedOrigins) {
+            @Value("https://${cors.allowed-origins") String allowedOrigins) {
         CorsConfiguration config = new CorsConfiguration();
         List<String> origins = Arrays.stream(allowedOrigins.split(","))
                 .map(String::trim)
@@ -31,6 +31,8 @@ public class GatewayCorsConfig {
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.addAllowedHeader("*");
+        config.setAllowCredentials(true);
+        config.setExposedHeaders(List.of("Authorization", "Content-Type", "Location"));
         config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
