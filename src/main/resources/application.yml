@@ -30,3 +30,14 @@ spring:
               uri: http://${ORDERS_IP:localhost}:8081
               predicates:
                 - Path=/api/v1/orders/**
+
+            # API USUARIOS
+            - id: users
+              uri: http://${USERS_IP:localhost}:8081
+              predicates:
+                - Path=/api/v1/users/**
+
+            - id: roles
+              uri: http://${USERS_IP:localhost}:8081
+              predicates:
+                - Path=/api/v1/roles/**
