@@ -62,7 +62,7 @@ jobs:
           docker run -d -p 80:9090 \
           -e INVENTORY_IP=${{ secrets.EC2_API_INVENTARIO_PRIVATE_IP}} \
           -e ORDERS_IP=${{ secrets.EC2_API_PEDIDOS_PRIVATE_IP}} \
-          -e CORS_ALLOWED_ORIGINS=${{ secrets.EC2_FRONTEND_PUBLIC_IP }} \
+          -e CORS_ALLOWED_ORIGINS=http://${{ secrets.EC2_FRONTEND_PUBLIC_IP }} \
           -e USERS_IP=${{ secrets.EC2_API_USUARIOS_PRIVATE_IP}} \
           --restart unless-stopped \
           --name gateway \
