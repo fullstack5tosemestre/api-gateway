@@ -62,4 +62,4 @@ spring:
                 - Path=/api/v1/roles/**
 
 cors:
-  allowed-origins: ${CORS_ALLOWED_ORIGINS:https://fullstack5tosemestre.github.io/frontend}
+  allowed-origins: http://${CORS_ALLOWED_ORIGINS}
