@@ -15,7 +15,7 @@ public class GatewayCorsConfig {
 
     @Bean
     public CorsWebFilter corsWebFilter(
-            @Value("http://${cors.allowed-origins") String allowedOrigins) {
+            @Value("${cors.allowed-origins}") String allowedOrigins) {
         CorsConfiguration config = new CorsConfiguration();
         List<String> origins = Arrays.stream(allowedOrigins.split(","))
                 .map(String::trim)
