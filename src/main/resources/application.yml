@@ -1,5 +1,9 @@
 server:
   port: 9090
+  error:
+    whitelabel:
+      enabled: false
+    path: /index.html
 
 spring:
   main:

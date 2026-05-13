@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>API Gateway smartlogix</title>
+    <style>
+        :root {
+            color-scheme: light dark;
+        }
+
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 2rem;
+            line-height: 1.5;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0 0;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+        }
+
+        code {
+            font-size: 0.95rem;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            border: 1px solid transparent;
+        }
+
+        .status::before {
+            content: "";
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            display: inline-block;
+            background: currentColor;
+        }
+
+        .status.loading {
+            color: #6b7280;
+            border-color: #d1d5db;
+            background: #f3f4f6;
+        }
+
+        .status.up {
+            color: #15803d;
+            border-color: #86efac;
+            background: #dcfce7;
+        }
+
+        .status.down {
+            color: #b91c1c;
+            border-color: #fecaca;
+            background: #fee2e2;
+        }
+
+        .last-checked {
+            color: #6b7280;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>API Gateway Smartlogix</h1>
+        <p>Endpoints</p>
+        <ul id="endpoints">
+            <li data-endpoint="/api/v1/products">
+                <span class="status loading" aria-live="polite">Checking</span>
+                <code>/api/v1/products</code>
+                <span class="last-checked"></span>
+            </li>
+            <li data-endpoint="/api/v1/branches">
+                <span class="status loading" aria-live="polite">Checking</span>
+                <code>/api/v1/branches</code>
+                <span class="last-checked"></span>
+            </li>
+            <li data-endpoint="/api/v1/warehouses">
+                <span class="status loading" aria-live="polite">Checking</span>
+                <code>/api/v1/warehouses</code>
+                <span class="last-checked"></span>
+            </li>
+            <li data-endpoint="/api/v1/users">
+                <span class="status loading" aria-live="polite">Checking</span>
+                <code>/api/v1/users</code>
+                <span class="last-checked"></span>
+            </li>
+            <li data-endpoint="/api/v1/roles">
+                <span class="status loading" aria-live="polite">Checking</span>
+                <code>/api/v1/roles</code>
+                <span class="last-checked"></span>
+            </li>
+        </ul>
+    </main>
+
+    <script>
+        const endpointItems = Array.from(document.querySelectorAll("#endpoints li"));
+        const formatTime = (date) => date.toLocaleTimeString(undefined, {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+        });
+
+        const updateStatus = (item, state, checkedAt) => {
+            const status = item.querySelector(".status");
+            const lastChecked = item.querySelector(".last-checked");
+
+            status.classList.remove("loading", "up", "down");
+            status.classList.add(state);
+            status.textContent = state === "up" ? "Online" : state === "down" ? "Offline" : "Checking";
+
+            if (checkedAt) {
+                lastChecked.textContent = `Last checked: ${formatTime(checkedAt)}`;
+            }
+        };
+
+        const pingEndpoint = async (item) => {
+            const endpoint = item.dataset.endpoint;
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 4000);
+            const checkedAt = new Date();
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: "GET",
+                    cache: "no-store",
+                    signal: controller.signal,
+                });
+
+                updateStatus(item, response.ok ? "up" : "down", checkedAt);
+            } catch (error) {
+                updateStatus(item, "down", checkedAt);
+            } finally {
+                clearTimeout(timeout);
+            }
+        };
+
+        const refreshStatuses = () => {
+            endpointItems.forEach((item) => updateStatus(item, "loading"));
+            endpointItems.forEach(pingEndpoint);
+        };
+
+        refreshStatuses();
+        setInterval(refreshStatuses, 60000);
+    </script>
+</body>
+
+</html>
