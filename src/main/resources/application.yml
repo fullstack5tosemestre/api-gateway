@@ -6,6 +6,19 @@ spring:
     web-application-type: reactive
   cloud:
     gateway:
+      globalcors:
+        corsConfigurations:
+          "[/**]":
+            allowedOrigins: "https://fullstack5tosemestre.github.io/frontend"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
       server:
         webflux:
           routes:
