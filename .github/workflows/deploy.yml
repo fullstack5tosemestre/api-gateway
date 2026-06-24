@@ -53,9 +53,10 @@ jobs:
           ECR_REPO_URL_API_GATEWAY: ${{ secrets.ECR_REPO_URL_API_GATEWAY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           ALB_DNS_NAME: ${{ secrets.ALB_DNS_NAME }}
+          INTERNAL_ALB_DNS: ${{ secrets.INTERNAL_ALB_DNS }}
         run: |
           export LAB_ROLE_ARN="arn:aws:iam::$(aws sts get-caller-identity --query Account --output text):role/LabRole"
-          envsubst '$ECR_REPO_URL_API_GATEWAY $AWS_REGION $ALB_DNS_NAME $LAB_ROLE_ARN' \
+          envsubst '$ECR_REPO_URL_API_GATEWAY $AWS_REGION $ALB_DNS_NAME $INTERNAL_ALB_DNS $LAB_ROLE_ARN' \
             < aws/taskdef-gateway.json > taskdef.json
 
       - name: Register task definition

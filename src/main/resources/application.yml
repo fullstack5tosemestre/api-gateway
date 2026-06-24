@@ -30,40 +30,40 @@ spring:
           routes:
             # API INVENTARIO
             - id: products
-              uri: http://${INVENTORY_IP:localhost}:8081
+              uri: http://${INVENTORY_IP:localhost}:${MICROSERVICE_PORT:8081}
               predicates:
                 - Path=/api/v1/products/**
 
             - id: branches
-              uri: http://${INVENTORY_IP:localhost}:8081
+              uri: http://${INVENTORY_IP:localhost}:${MICROSERVICE_PORT:8081}
               predicates:
                 - Path=/api/v1/branches/**
 
             - id: warehouses
-              uri: http://${INVENTORY_IP:localhost}:8081
+              uri: http://${INVENTORY_IP:localhost}:${MICROSERVICE_PORT:8081}
               predicates:
                 - Path=/api/v1/warehouses/**
 
             # API PEDIDOS
             - id: orders
-              uri: http://${ORDERS_IP:localhost}:8081
+              uri: http://${ORDERS_IP:localhost}:${MICROSERVICE_PORT:8081}
               predicates:
                 - Path=/api/v1/orders/**
 
             # API USUARIOS
             - id: users
-              uri: http://${USERS_IP:localhost}:8081
+              uri: http://${USERS_IP:localhost}:${MICROSERVICE_PORT:8081}
               predicates:
                 - Path=/api/v1/users/**
 
             - id: roles
-              uri: http://${USERS_IP:localhost}:8081
+              uri: http://${USERS_IP:localhost}:${MICROSERVICE_PORT:8081}
               predicates:
                 - Path=/api/v1/roles/**
 
                 # SWAGGER INVENTARIO
             - id: inventory-docs
-              uri: http://${INVENTORY_IP:localhost}:8081
+              uri: http://${INVENTORY_IP:localhost}:${MICROSERVICE_PORT:8081}
               predicates:
                 - Path=/inventario/v3/api-docs
               filters:
@@ -71,7 +71,7 @@ spring:
 
             # SWAGGER PEDIDOS
             - id: orders-docs
-              uri: http://${ORDERS_IP:localhost}:8081
+              uri: http://${ORDERS_IP:localhost}:${MICROSERVICE_PORT:8081}
               predicates:
                 - Path=/pedidos/v3/api-docs
               filters:
@@ -79,7 +79,7 @@ spring:
 
             # SWAGGER USUARIOS
             - id: users-docs
-              uri: http://${USERS_IP:localhost}:8081
+              uri: http://${USERS_IP:localhost}:${MICROSERVICE_PORT:8081}
               predicates:
                 - Path=/usuarios/v3/api-docs
               filters:
