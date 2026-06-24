@@ -14,20 +14,22 @@ public class WebClientConfig {
     String ordersIp;
     @Value("${USERS_IP:localhost}")
     String usersIp;
+    @Value("${MICROSERVICE_PORT:8081}")
+    String microservicePort;
 
     @Bean("inventory")
     public WebClient inventoryClient(WebClient.Builder builder) {
-        return builder.baseUrl("http://" + inventoryIp + ":8081").build();
+        return builder.baseUrl("http://" + inventoryIp + ":" + microservicePort).build();
     }
 
     @Bean("orders")
     public WebClient ordersClient(WebClient.Builder builder) {
-        return builder.baseUrl("http://" + ordersIp + ":8081").build();
+        return builder.baseUrl("http://" + ordersIp + ":" + microservicePort).build();
     }
 
     @Bean("users")
     public WebClient usersClient(WebClient.Builder builder) {
-        return builder.baseUrl("http://" + usersIp + ":8081").build();
+        return builder.baseUrl("http://" + usersIp + ":" + microservicePort).build();
     }
 
     // Provide a WebClient.Builder bean so other @Bean methods can accept it as a
