@@ -14,9 +14,10 @@
         { "name": "gateway-9090", "containerPort": 9090, "protocol": "tcp" }
       ],
       "environment": [
-        { "name": "INVENTORY_IP",          "value": "inventario" },
-        { "name": "ORDERS_IP",             "value": "pedidos" },
-        { "name": "USERS_IP",              "value": "usuario" },
+        { "name": "INVENTORY_IP",          "value": "$INTERNAL_ALB_DNS" },
+        { "name": "ORDERS_IP",             "value": "$INTERNAL_ALB_DNS" },
+        { "name": "USERS_IP",              "value": "$INTERNAL_ALB_DNS" },
+        { "name": "MICROSERVICE_PORT",     "value": "80" },
         { "name": "CORS_ALLOWED_ORIGINS",  "value": "http://$ALB_DNS_NAME" }
       ],
       "logConfiguration": {
