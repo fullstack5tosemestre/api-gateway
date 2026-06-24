@@ -1,0 +1,32 @@
+{
+  "family": "task-gateway",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "taskRoleArn": "$LAB_ROLE_ARN",
+  "executionRoleArn": "$LAB_ROLE_ARN",
+  "containerDefinitions": [
+    {
+      "name": "gateway",
+      "image": "$ECR_REPO_URL_API_GATEWAY:latest",
+      "portMappings": [
+        { "name": "gateway-9090", "containerPort": 9090, "protocol": "tcp" }
+      ],
+      "environment": [
+        { "name": "INVENTORY_IP",          "value": "inventario" },
+        { "name": "ORDERS_IP",             "value": "pedidos" },
+        { "name": "USERS_IP",              "value": "usuario" },
+        { "name": "CORS_ALLOWED_ORIGINS",  "value": "http://$ALB_DNS_NAME" }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/task-gateway",
+          "awslogs-region": "$AWS_REGION",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}

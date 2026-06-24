@@ -60,10 +60,10 @@ spring:
               uri: http://${USERS_IP:localhost}:8081
               predicates:
                 - Path=/api/v1/roles/**
-              
-               # SWAGGER INVENTARIO
+
+                # SWAGGER INVENTARIO
             - id: inventory-docs
-              uri: http://${INVENTORY_IP}:8081
+              uri: http://${INVENTORY_IP:localhost}:8081
               predicates:
                 - Path=/inventario/v3/api-docs
               filters:
@@ -71,7 +71,7 @@ spring:
 
             # SWAGGER PEDIDOS
             - id: orders-docs
-              uri: http://${ORDERS_IP}:8081
+              uri: http://${ORDERS_IP:localhost}:8081
               predicates:
                 - Path=/pedidos/v3/api-docs
               filters:
@@ -79,7 +79,7 @@ spring:
 
             # SWAGGER USUARIOS
             - id: users-docs
-              uri: http://${USERS_IP}:8081
+              uri: http://${USERS_IP:localhost}:8081
               predicates:
                 - Path=/usuarios/v3/api-docs
               filters:
@@ -97,4 +97,4 @@ springdoc:
         url: /usuarios/v3/api-docs
 
 cors:
-  allowed-origins: ${CORS_ALLOWED_ORIGINS}
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000}
