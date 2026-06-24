@@ -76,6 +76,7 @@ jobs:
             aws ecs update-service \
               --cluster $ECS_CLUSTER \
               --service $ECS_SERVICE \
+              --task-definition $TASK_FAMILY \
               --force-new-deployment \
               --query 'service.{service:serviceName,taskDefinition:taskDefinition}'
             echo "Waiting for service to stabilize..."
