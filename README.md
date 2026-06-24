@@ -40,7 +40,7 @@ El enrutamiento se declara de forma **declarativa** en `application.yml` (secci√
 | `/api/v1/orders/**` | api-pedidos | `ORDERS_IP` |
 | `/api/v1/users/**` | api-usuario | `USERS_IP` |
 | `/api/v1/roles/**` | api-usuario | `USERS_IP` |
-| `/api/swagger-ui/index.html` | panel swagger | N/A |
+| `/swagger-ui/index.html` | panel swagger | N/A |
 Todos los microservicios destino escuchan en el mismo puerto (`MICROSERVICE_PORT`, por defecto `8081`); se diferencian por su IP/host.
 
 ### Patrones de dise√±o aplicados
